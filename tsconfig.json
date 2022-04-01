@@ -15,8 +15,10 @@
     "esModuleInterop": true,
     "removeComments": false,
     "jsx": "preserve",
-    "lib": ["esnext", "dom"],
-    "types": ["node"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "rootDir": ".",
     "paths": {
       "@vue/*": ["packages/*/src"],
