@@ -1,7 +1,8 @@
 import type { Target } from './reactive'
 export let activeEffect: ReactiveEffect<any> | null = null
 
-class ReactiveEffect <T> {
+class ReactiveEffect <T = any> {
+  public parent: ReactiveEffect | null
   public active = true
   public deps: Set<ReactiveEffect<T>>[] = []
   constructor(public fn: () => T) {
@@ -10,13 +11,23 @@ class ReactiveEffect <T> {
 
   run() {
     try {
+      this.parent = activeEffect
       activeEffect = this
+      cleanup(this)
       return this.fn()
     }
     finally {
-      activeEffect = null
+      activeEffect = this.parent
     }
   }
+}
+function cleanup(effect: ReactiveEffect) {
+  const { deps } = effect
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++)
+      deps[i].delete(effect)
+  }
+  effect.deps.length = 0
 }
 
 export function effect<T>(fn: () => T) {
@@ -45,10 +56,12 @@ export function trigger(target: Target, type: string, key: string | symbol) {
   const depsMap = targetMap.get(target)
   if (!depsMap)
     return
-  const dep = depsMap.get(key)
-  if (!dep)
+  let effects = depsMap.get(key)
+  if (!effects)
     return
-  dep.forEach((effect) => {
+
+  effects = new Set(effects)
+  effects && effects.forEach((effect) => {
     if (effect !== activeEffect)
       effect.run()
   })

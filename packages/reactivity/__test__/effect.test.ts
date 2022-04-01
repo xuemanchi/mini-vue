@@ -45,4 +45,22 @@ describe('effect', () => {
     state.foo = 'foofoo'
     expect(_fn).toBeCalledTimes(2)
   })
+
+  it('should avoid extra effect called', () => {
+    const state = reactive({
+      foo: 'foo',
+      bar: 'bar',
+      baz: 'baz',
+    })
+    let r
+    const _fn = fn(() => {
+      r = state.foo ? state.bar : state.baz
+    })
+    effect(_fn)
+    expect(_fn).toBeCalledTimes(1)
+    state.foo = ''
+    expect(_fn).toBeCalledTimes(2)
+    state.bar = 'barbar'
+    expect(_fn).toBeCalledTimes(2)
+  })
 })
