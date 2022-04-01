@@ -1,16 +1,26 @@
 import { assert, describe, expect, it } from 'vitest'
+import { reactive } from '../src/reactive'
 
-describe('suite name', () => {
-  it('foo', () => {
-    expect(1 + 1).toEqual(2)
-    expect(true).to.be.true
+describe('reactive', () => {
+  it('basic', () => {
+    const proxy = reactive({
+      foo: 1,
+    })
+    expect(proxy.foo).toBe(1)
   })
-
-  it('bar', () => {
-    assert.equal(Math.sqrt(4), 2)
-  })
-
-  it('snapshot', () => {
-    expect({ foo: 'bar' }).toMatchSnapshot()
+  it('called with get property', () => {
+    const target = {
+      foo: 'foo',
+      get bar() {
+        return this.foo
+      },
+      get baz() {
+        return this
+      },
+    }
+    const proxy = reactive(target)
+    expect(proxy.bar).toBe('foo')
+    expect(proxy.baz).not.toBe(target)
+    expect(proxy.baz).toBe(proxy)
   })
 })
