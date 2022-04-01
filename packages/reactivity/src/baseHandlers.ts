@@ -1,5 +1,5 @@
 
-import { activeEffect, track, trigger } from './effect'
+import { track, trigger } from './effect'
 import type { Target } from './reactive'
 import { ReactiveFlags } from './reactive'
 

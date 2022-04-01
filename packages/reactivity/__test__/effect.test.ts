@@ -32,4 +32,17 @@ describe('effect', () => {
     state.foo = 'foo'
     expect(_fn).toBeCalledTimes(1)
   })
+  it('should avoid implicit infinite recursive loops with itself', () => {
+    const state = reactive({
+      foo: 'foo',
+    })
+    const _fn = fn(() => {
+      state.foo = Math.random()
+      return state.foo
+    })
+    effect(_fn)
+    expect(_fn).toBeCalledTimes(1)
+    state.foo = 'foofoo'
+    expect(_fn).toBeCalledTimes(2)
+  })
 })

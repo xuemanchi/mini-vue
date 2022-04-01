@@ -49,7 +49,7 @@ export function trigger(target: Target, type: string, key: string | symbol) {
   if (!dep)
     return
   dep.forEach((effect) => {
-    if (effect.active)
+    if (effect !== activeEffect)
       effect.run()
   })
 }
