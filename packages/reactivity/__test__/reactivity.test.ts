@@ -34,6 +34,17 @@ describe('reactive', () => {
     expect(proxy).toBe(proxy2)
   })
 
+  it('a proxy data called with reactive muti should return the sanme proxy', () => {
+    const target = {
+      foo: 'foo',
+    }
+    const proxy = reactive(target)
+    const proxy2 = reactive(proxy)
+    const proxy3 = reactive(proxy2)
+
+    expect(proxy2).toBe(proxy3)
+  })
+
   it('reactive calle with normal variable should be return undefined', () => {
     // @ts-expect-error ignore
     const proxy1 = reactive(0)
