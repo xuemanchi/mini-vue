@@ -1,4 +1,5 @@
 import { isObject } from '@vue/shared'
+import { mutableHandlers } from './baseHandlers'
 
 export const enum ReactiveFlags {
   SKIP = '__v_skip',
@@ -29,19 +30,7 @@ export function reactive<T extends object>(target: T & Target) {
   if (isExisted)
     return isExisted
 
-  const proxy = new Proxy(target, {
-    get(t, key, receive) {
-      if (key === ReactiveFlags.IS_REACTIVE)
-        return true
-
-      const r = Reflect.get(t, key, receive)
-      return r
-    },
-    set(t, key, val, receive) {
-      const r = Reflect.set(t, key, val, receive)
-      return r
-    },
-  })
+  const proxy = new Proxy(target, mutableHandlers)
   reactiveMap.set(target, proxy)
   return proxy
 }
