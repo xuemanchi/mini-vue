@@ -9,7 +9,7 @@ describe('effect', () => {
     expect(_fn).toBeCalledTimes(1)
   })
 
-  it('effect called normally', () => {
+  it('reactive data change, effect fn will called again', () => {
     const state = reactive({
       foo: 'foo',
     })
@@ -19,7 +19,17 @@ describe('effect', () => {
     })
     expect(val).toBe('foo')
     state.foo = 'foofoo'
-    expect(val).toMatchInlineSnapshot('"foofoo"')
     expect(val).toBe('foofoo')
+  })
+
+  it('reactive data no change, effect fn will not called', () => {
+    const state = reactive({
+      foo: 'foo',
+    })
+    const _fn = fn(() => state.foo)
+    effect(_fn)
+    expect(_fn).toBeCalledTimes(1)
+    state.foo = 'foo'
+    expect(_fn).toBeCalledTimes(1)
   })
 })

@@ -12,8 +12,11 @@ export const mutableHandlers = {
     return r
   },
   set(t: Target, key: string | symbol, val: unknown, receiver: object) {
+    const oldVal = t[key]
     const r = Reflect.set(t, key, val, receiver)
-    trigger(t, 'set', key)
+    if (oldVal !== val)
+      trigger(t, 'set', key)
+
     return r
   },
 }
