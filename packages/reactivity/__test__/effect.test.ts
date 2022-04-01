@@ -1,4 +1,4 @@
-import { assert, describe, expect, fn, it } from 'vitest'
+import { describe, expect, fn, it } from 'vitest'
 import { effect } from '../src/index'
 
 describe('effect', () => {
