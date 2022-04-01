@@ -1,0 +1,23 @@
+{
+  "name": "impl-vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node script/build.js reactivity -f global"
+  },
+  "engines": {
+    "node": ">=10",
+    "pnpm": ">=3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.17.0",
+    "esbuild": "^0.14.29",
+    "eslint": "^8.12.0",
+    "minimist": "^1.2.6",
+    "typescript": "^4.6.3"
+  }
+}
