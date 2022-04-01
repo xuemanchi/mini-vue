@@ -26,6 +26,7 @@ export function effect<T>(fn: () => T) {
 }
 const targetMap = new WeakMap<Target, Map<string|symbol, Set<ReactiveEffect<any>>>>()
 export function track(target: Target, type: string, key: string | symbol) {
+  if (!activeEffect) return
   let depsMap = targetMap.get(target)
   if (!depsMap)
     targetMap.set(target, (depsMap = new Map()))
