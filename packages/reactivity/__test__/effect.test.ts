@@ -63,4 +63,27 @@ describe('effect', () => {
     state.bar = 'barbar'
     expect(_fn).toBeCalledTimes(2)
   })
+
+  it('should custom schedule', () => {
+    const state = reactive({
+      foo: 'foo',
+      bar: 'bar',
+      baz: 'baz',
+    })
+    let r
+    const _fn = fn(() => {
+      r = state.foo ? state.bar : state.baz
+    })
+    const customSchefuler = fn(() => {})
+    const _effect = effect(_fn, {
+      scheduler() {
+        customSchefuler()
+      },
+    })
+    expect(_fn).toBeCalledTimes(1)
+    expect(customSchefuler).toBeCalledTimes(0)
+    state.foo = ''
+    expect(_fn).toBeCalledTimes(1)
+    expect(customSchefuler).toBeCalledTimes(1)
+  })
 })

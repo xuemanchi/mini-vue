@@ -1,11 +1,12 @@
+import { assign } from '@vue/shared'
 import type { Target } from './reactive'
 export let activeEffect: ReactiveEffect<any> | null = null
 
-class ReactiveEffect <T = any> {
+export class ReactiveEffect <T = any> {
   public parent: ReactiveEffect | null
   public active = true
   public deps: Set<ReactiveEffect<T>>[] = []
-  constructor(public fn: () => T) {
+  constructor(public fn: () => T, public scheduler: () => void) {
 
   }
 
@@ -30,8 +31,13 @@ function cleanup(effect: ReactiveEffect) {
   effect.deps.length = 0
 }
 
-export function effect<T>(fn: () => T) {
-  const _effect = new ReactiveEffect(fn)
+export interface EffectOpts {
+  scheduler?: (...args: any) => void
+}
+
+export function effect<T>(fn: () => T, opts?: EffectOpts = {}) {
+  const _effect = new ReactiveEffect(fn, opts?.scheduler)
+  assign(_effect, opts)
   if (_effect.active)
     _effect.run()
 }
@@ -62,7 +68,11 @@ export function trigger(target: Target, type: string, key: string | symbol) {
 
   effects = new Set(effects)
   effects && effects.forEach((effect) => {
-    if (effect !== activeEffect)
-      effect.run()
+    if (effect !== activeEffect) {
+      if (effect.scheduler)
+        effect.scheduler()
+      else
+        effect.run()
+    }
   })
 }
