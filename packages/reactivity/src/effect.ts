@@ -3,7 +3,7 @@ import type { Target } from './reactive'
 export let activeEffect: ReactiveEffect<any> | null = null
 
 export class ReactiveEffect <T = any> {
-  public parent: ReactiveEffect | null
+  public parent: ReactiveEffect | null = null
   public active = true
   public deps: Set<ReactiveEffect<T>>[] = []
   constructor(public fn: () => T, public scheduler?: () => void) {
@@ -35,7 +35,7 @@ export interface EffectOpts {
   scheduler?: (...args: any) => void
 }
 
-export function effect<T>(fn: () => T, opts?: EffectOpts = {}) {
+export function effect<T>(fn: () => T, opts: EffectOpts = {}) {
   const _effect = new ReactiveEffect(fn, opts?.scheduler)
   assign(_effect, opts)
   if (_effect.active)

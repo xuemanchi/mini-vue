@@ -1,5 +1,5 @@
-import { describe, expect, fn, it } from 'vitest'
-import { effect, reactive, watch } from '../src/index'
+import { describe, expect, it } from 'vitest'
+import { reactive, watch } from '../src/index'
 
 describe('watch', () => {
   it('normal', () => {

@@ -4,7 +4,7 @@ import { effect, reactive } from '../src/index'
 describe('effect', () => {
   it('effect called normally', () => {
     const _fn = fn()
-    const _effect = effect(_fn)
+    effect(_fn)
 
     expect(_fn).toBeCalledTimes(1)
   })
@@ -52,9 +52,8 @@ describe('effect', () => {
       bar: 'bar',
       baz: 'baz',
     })
-    let r
     const _fn = fn(() => {
-      r = state.foo ? state.bar : state.baz
+      state.foo ? state.bar : state.baz
     })
     effect(_fn)
     expect(_fn).toBeCalledTimes(1)
@@ -70,12 +69,11 @@ describe('effect', () => {
       bar: 'bar',
       baz: 'baz',
     })
-    let r
     const _fn = fn(() => {
-      r = state.foo ? state.bar : state.baz
+      state.foo ? state.bar : state.baz
     })
     const customSchefuler = fn(() => {})
-    const _effect = effect(_fn, {
+    effect(_fn, {
       scheduler() {
         customSchefuler()
       },

@@ -1,4 +1,4 @@
-import { isArray, isObject } from '@vue/shared'
+import { isObject } from '@vue/shared'
 import { ReactiveEffect } from './effect'
 
 function traverse(val: any) {
