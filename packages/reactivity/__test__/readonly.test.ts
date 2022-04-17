@@ -1,4 +1,4 @@
-import { describe, expect, fn, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { readonly } from '../src/readonly'
 
 describe('readonly', () => {
