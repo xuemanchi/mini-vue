@@ -4,6 +4,7 @@ import type { Target } from './reactive'
 import { ReactiveFlags } from './reactive'
 
 const get = createGetter()
+const readonlyGet = createGetter(true)
 const set = createSetter()
 
 function createGetter(isReadonly = false) {
@@ -11,7 +12,8 @@ function createGetter(isReadonly = false) {
     if (key === ReactiveFlags.IS_REACTIVE)
       return true
     const r = Reflect.get(t, key, receiver)
-    track(t, 'get', key)
+    if (!isReadonly)
+      track(t, 'get', key)
     return r
   }
 }
@@ -30,4 +32,12 @@ function createSetter() {
 export const mutableHandlers = {
   get,
   set,
+}
+
+export const readonlyHandlers = {
+  get: readonlyGet,
+  set() {
+    console.warn('Cannot Set operation on readonly target')
+    return true
+  },
 }

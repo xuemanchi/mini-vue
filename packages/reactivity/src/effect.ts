@@ -1,5 +1,6 @@
 import { assign } from '@vue/shared'
 import type { Target } from './reactive'
+// eslint-disable-next-line import/no-mutable-exports
 export let activeEffect: ReactiveEffect<any> | null = null
 
 export class ReactiveEffect <T = any> {
